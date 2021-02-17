@@ -1,4 +1,4 @@
-import { Client } from "@line/bot-sdk";
+import { Client, MessageAPIResponseBase } from "@line/bot-sdk";
 import { SimplifiedAlbum } from "spotify-web-api-ts/types/types/SpotifyObjects";
 import { concatArtistNames } from "./spotify";
 
@@ -6,13 +6,13 @@ export const notifyNewReleases = (
   client: Client,
   addressee: string,
   albums: SimplifiedAlbum[]
-) => {
+): Promise<MessageAPIResponseBase> => {
   if (albums.length >= 1) {
     const message = {
-      type: "template" as "template",
+      type: "template" as const,
       altText: "New releases on Spotify found.",
       template: {
-        type: "carousel" as "carousel",
+        type: "carousel" as const,
         columns: albums.map((album) => {
           return {
             thumbnailImageUrl: album.images[0].url,
@@ -20,14 +20,14 @@ export const notifyNewReleases = (
             text: concatArtistNames(album.artists).substring(0, 60),
             actions: [
               {
-                type: "uri" as "uri",
+                type: "uri" as const,
                 label: "Open in Spotify",
                 uri: album.external_urls.spotify,
               },
             ],
           };
         }),
-        imageAspectRatio: "square" as "square",
+        imageAspectRatio: "square" as const,
       },
     };
     return client.pushMessage(addressee, message);

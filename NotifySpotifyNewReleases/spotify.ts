@@ -1,5 +1,8 @@
 import { SpotifyWebApi } from "spotify-web-api-ts";
-import { SimplifiedArtist } from "spotify-web-api-ts/types/types/SpotifyObjects";
+import {
+  SimplifiedAlbum,
+  SimplifiedArtist,
+} from "spotify-web-api-ts/types/types/SpotifyObjects";
 
 export const concatArtistNames = (artists: SimplifiedArtist[]): string => {
   const names = artists.map((artist) => artist.name);
@@ -13,9 +16,11 @@ export const concatArtistNames = (artists: SimplifiedArtist[]): string => {
   return concatNames;
 };
 
-export const getFollowedArtists = async (client: SpotifyWebApi) => {
+export const getFollowedArtists = async (
+  client: SpotifyWebApi
+): Promise<SimplifiedArtist[]> => {
   let iter = await client.follow.getFollowedArtists({ limit: 50 });
-  let artists = iter.items;
+  const artists = iter.items;
 
   while (iter.next !== null) {
     const curr = await client.follow.getFollowedArtists({
@@ -33,7 +38,7 @@ export const getFollowedArtists = async (client: SpotifyWebApi) => {
 export const getNewReleases = async (
   client: SpotifyWebApi,
   artist: SimplifiedArtist
-) => {
+): Promise<SimplifiedAlbum[]> => {
   const toJstString = (date: Date): string => {
     return new Date(date.getTime() + 9 * 60 * 60 * 1000)
       .toISOString()
