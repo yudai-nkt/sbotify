@@ -38,7 +38,7 @@ export const notifyNewReleases = (
         type: "text",
         text: "No releases found today.",
       },
-      false
+      true
     );
   }
 };
