@@ -5,13 +5,24 @@ import { EXCLUDES } from "./constants";
 import { notifyNewReleases } from "./line";
 import { getFollowedArtists, getNewReleases } from "./spotify";
 
+// Based on the doc: https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer?tabs=csharp#usage
+type Timer = {
+  schedule: Record<string, unknown>;
+  scheduleStatus: {
+    last: string;
+    lastUpdated: string;
+    next: string;
+  };
+  isPastDue: boolean;
+};
+
 const timerTrigger: AzureFunction = async function (
   context: Context,
-  myTimer: any
+  myTimer: Timer
 ): Promise<void> {
   const timeStamp = new Date().toISOString();
 
-  if (myTimer.IsPastDue) {
+  if (myTimer.isPastDue) {
     context.log("Timer function is running late!");
   }
   context.log("Timer trigger function ran!", timeStamp, process.version);
