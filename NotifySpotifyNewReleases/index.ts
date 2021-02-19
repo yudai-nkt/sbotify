@@ -46,7 +46,11 @@ const timerTrigger: AzureFunction = async function (
   for (const artist of artists.filter(
     (artist) => !EXCLUDES.includes(artist.name)
   )) {
-    const newReleasePerArtist = await getNewReleases(spotify, artist);
+    const newReleasePerArtist = await getNewReleases(
+      spotify,
+      artist,
+      new Date()
+    );
     newReleases.push(...newReleasePerArtist);
   }
   const newReleasesDedup = [

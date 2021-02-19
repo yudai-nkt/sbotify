@@ -37,7 +37,8 @@ export const getFollowedArtists = async (
 
 export const getNewReleases = async (
   client: SpotifyWebApi,
-  artist: SimplifiedArtist
+  artist: SimplifiedArtist,
+  since: Date
 ): Promise<SimplifiedAlbum[]> => {
   const toJstString = (date: Date): string => {
     return new Date(date.getTime() + 9 * 60 * 60 * 1000)
@@ -49,7 +50,7 @@ export const getNewReleases = async (
     country: "JP",
   });
   const newReleases = discography.items.filter(
-    (album) => album.release_date === toJstString(new Date()).substring(0, 10)
+    (album) => album.release_date === toJstString(since).substring(0, 10)
   );
   return newReleases;
 };
