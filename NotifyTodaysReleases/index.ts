@@ -3,7 +3,7 @@ import { Client } from "@line/bot-sdk";
 import { SpotifyWebApi } from "spotify-web-api-ts";
 import { EXCLUDES } from "./constants";
 import { notifyNewReleases } from "./line";
-import { getFollowedArtists, getNewReleases } from "./spotify";
+import { getFollowedArtists, getDiscographyReleasedOn } from "./spotify";
 
 // Based on the doc: https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer?tabs=csharp#usage
 type Timer = {
@@ -42,25 +42,25 @@ const timerTrigger: AzureFunction = async function (
   });
 
   const artists = await getFollowedArtists(spotify);
-  const newReleases = [];
+  const todaysReleases = [];
   for (const artist of artists.filter(
     (artist) => !EXCLUDES.includes(artist.name)
   )) {
-    const newReleasePerArtist = await getNewReleases(
+    const todaysReleasesPerArtist = await getDiscographyReleasedOn(
       spotify,
       artist,
       new Date()
     );
-    newReleases.push(...newReleasePerArtist);
+    todaysReleases.push(...todaysReleasesPerArtist);
   }
-  const newReleasesDedup = [
-    ...new Map(newReleases.map((album) => [album.id, album])).values(),
+  const todaysReleasesDedup = [
+    ...new Map(todaysReleases.map((album) => [album.id, album])).values(),
   ];
 
-  await notifyNewReleases(line, process.env.LINE_ID, newReleasesDedup);
+  await notifyNewReleases(line, process.env.LINE_ID, todaysReleasesDedup);
 
-  if (newReleasesDedup.length >= 1) {
-    context.log(newReleasesDedup);
+  if (todaysReleasesDedup.length >= 1) {
+    context.log(todaysReleasesDedup);
   } else {
     context.log("No release found today.");
   }

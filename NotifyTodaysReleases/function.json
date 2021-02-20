@@ -7,5 +7,5 @@
       "schedule": "*/20 * * * * *"
     }
   ],
-  "scriptFile": "../dist/NotifySpotifyNewReleases/bundle.js"
+  "scriptFile": "../dist/NotifyTodaysReleases/bundle.js"
 }

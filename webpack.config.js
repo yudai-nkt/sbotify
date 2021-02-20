@@ -1,11 +1,11 @@
 const path = require("path");
 
 module.exports = {
-  target: "node", // IMPORTANT!
+  target: "node",
   entry: {
-    NotifySpotifyNewReleases: path.resolve(
+    NotifyTodaysReleases: path.resolve(
       __dirname,
-      "./NotifySpotifyNewReleases/index.ts"
+      "./NotifyTodaysReleases/index.ts"
     ),
   },
   module: {
@@ -24,13 +24,10 @@ module.exports = {
   },
   resolve: {
     extensions: [".ts", ".js"],
-    // plugins: [
-    //   new TsconfigPathsPlugin()
-    // ]
   },
   output: {
     filename: "[name]/bundle.js",
     path: path.resolve(__dirname, "dist"),
-    libraryTarget: "commonjs", // IMPORTANT!
+    libraryTarget: "commonjs",
   },
 };
