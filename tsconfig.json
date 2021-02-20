@@ -3,7 +3,7 @@
     "module": "commonjs",
     "target": "es6",
     "outDir": "dist",
-    "rootDir": ".",
+    "rootDirs": ["NotifySpotifyNewReleases"],
     "sourceMap": true,
     "strict": false
   }
