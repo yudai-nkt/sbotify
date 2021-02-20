@@ -33,12 +33,14 @@ const timerTrigger: AzureFunction = async function (
     redirectUri: "https://github.com/yudai-nkt/sbotify",
   });
   const accessToken = (
-    await spotify.getRefreshedAccessToken(process.env.SPOTIFY_REFRESH_TOKEN)
+    await spotify.getRefreshedAccessToken(
+      process.env.SPOTIFY_REFRESH_TOKEN ?? ""
+    )
   ).access_token;
   spotify.setAccessToken(accessToken);
 
   const line = new Client({
-    channelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN,
+    channelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN ?? "",
   });
 
   const artists = await getFollowedArtists(spotify);
@@ -57,7 +59,7 @@ const timerTrigger: AzureFunction = async function (
     ...new Map(todaysReleases.map((album) => [album.id, album])).values(),
   ];
 
-  await notifyNewReleases(line, process.env.LINE_ID, todaysReleasesDedup);
+  await notifyNewReleases(line, process.env.LINE_ID ?? "", todaysReleasesDedup);
 
   if (todaysReleasesDedup.length >= 1) {
     context.log(todaysReleasesDedup);
