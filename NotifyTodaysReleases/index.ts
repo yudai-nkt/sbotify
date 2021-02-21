@@ -1,6 +1,7 @@
 import { AzureFunction, Context } from "@azure/functions";
 import { Client } from "@line/bot-sdk";
 import { SpotifyWebApi } from "spotify-web-api-ts";
+import { SimplifiedAlbum } from "spotify-web-api-ts/types/types/SpotifyObjects";
 import { EXCLUDES } from "./constants";
 import { notifyNewReleases } from "./line";
 import { getFollowedArtists, getDiscographyReleasedOn } from "./spotify";
@@ -44,7 +45,7 @@ const timerTrigger: AzureFunction = async function (
   });
 
   const artists = await getFollowedArtists(spotify);
-  const todaysReleases = [];
+  const todaysReleases: SimplifiedAlbum[] = [];
   for (const artist of artists.filter(
     (artist) => !EXCLUDES.includes(artist.name)
   )) {
@@ -55,9 +56,10 @@ const timerTrigger: AzureFunction = async function (
     );
     todaysReleases.push(...todaysReleasesPerArtist);
   }
-  const todaysReleasesDedup = [
-    ...new Map(todaysReleases.map((album) => [album.id, album])).values(),
-  ];
+  const todaysReleasesDedup = todaysReleases.filter(
+    (release, idx) =>
+      todaysReleases.findIndex((uniq) => uniq.id === release.id) === idx
+  );
 
   await notifyNewReleases(line, process.env.LINE_ID ?? "", todaysReleasesDedup);
 
