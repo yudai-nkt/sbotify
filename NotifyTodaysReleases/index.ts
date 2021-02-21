@@ -21,12 +21,11 @@ const timerTrigger: AzureFunction = async function (
   context: Context,
   myTimer: Timer
 ): Promise<void> {
-  const timeStamp = new Date().toISOString();
+  const timestamp = new Date();
 
   if (myTimer.isPastDue) {
-    context.log("Timer function is running late!");
+    context.log(`Timer function is running late (${timestamp.toISOString}).`);
   }
-  context.log("Timer trigger function ran!", timeStamp, process.version);
 
   const spotify = new SpotifyWebApi({
     clientId: process.env.SPOTIFY_CLIENT_ID,
@@ -52,7 +51,7 @@ const timerTrigger: AzureFunction = async function (
     const todaysReleasesPerArtist = await getDiscographyReleasedOn(
       spotify,
       artist,
-      new Date()
+      timestamp
     );
     todaysReleases.push(...todaysReleasesPerArtist);
   }
