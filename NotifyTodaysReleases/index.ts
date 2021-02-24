@@ -63,7 +63,7 @@ const timerTrigger: AzureFunction = async function (
   await notifyNewReleases(line, process.env.LINE_ID ?? "", todaysReleasesDedup);
 
   if (todaysReleasesDedup.length >= 1) {
-    context.log(todaysReleasesDedup);
+    context.log(JSON.stringify(todaysReleasesDedup, undefined, 2));
   } else {
     context.log("No release found today.");
   }
