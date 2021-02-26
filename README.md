@@ -18,3 +18,4 @@ npm start
 ## License
 
 This repository is licensed under the MIT License.
+See [LICENSE.md](./LICENSE.md) for details.
