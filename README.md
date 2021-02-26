@@ -6,7 +6,7 @@ Azure Function for a Spotify-related bot service
 
 ## Fearture
 
-- Send new releases information using [LINE Messenger API](https://developers.line.biz/en/services/messaging-api/).
+- Send new releases information using [LINE Messaging API](https://developers.line.biz/en/services/messaging-api/).
 
 ## Local development
 
