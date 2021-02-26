@@ -2,6 +2,15 @@ import { Client, MessageAPIResponseBase } from "@line/bot-sdk";
 import { SimplifiedAlbum } from "spotify-web-api-ts/types/types/SpotifyObjects";
 import { concatArtistNames } from "./spotify";
 
+/**
+ * Send a LINE message about the albums given in the parameter
+ * using a carousel template message.
+ * If there are no albums, a text message saying that no releases are found is sent
+ * without push notification instead.
+ * @param client - LINE client in use.
+ * @param addressee - LINE ID to whom the message is sent.
+ * @returns Response of the API call.
+ */
 export const notifyNewReleases = (
   client: Client,
   addressee: string,

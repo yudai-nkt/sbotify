@@ -4,6 +4,12 @@ import {
   SimplifiedArtist,
 } from "spotify-web-api-ts/types/types/SpotifyObjects";
 
+/**
+ * Concatenated artists' names.
+ * Format differs based on the number of artists given in the parameter.
+ * @param artists - Array of artists whose names are concatenated.
+ * @returns The concatenated name.
+ */
 export const concatArtistNames = (artists: SimplifiedArtist[]): string => {
   const names = artists.map((artist) => artist.name);
   let concatNames: string;
@@ -16,6 +22,11 @@ export const concatArtistNames = (artists: SimplifiedArtist[]): string => {
   return concatNames;
 };
 
+/**
+ * Get an array of the artists you follow.
+ * @param client - Spotify API client in use.
+ * @returns Array of the artists you follow.
+ */
 export const getFollowedArtists = async (
   client: SpotifyWebApi
 ): Promise<SimplifiedArtist[]> => {
@@ -35,6 +46,18 @@ export const getFollowedArtists = async (
   return artists;
 };
 
+/**
+ * Get an array of the albums released by a specific artist on a specific date.
+ * @param client - Spotify API client in use.
+ * @param artist - Artist whose albums you are looking for.
+ * @param releaseDate - Release date.
+ * @returns Array of the albums that satisfy the conditions.
+ *
+ * @remarks
+ *
+ * This function currently assumes that an artist would not release more than 50 albums
+ * in a day.
+ */
 export const getDiscographyReleasedOn = async (
   client: SpotifyWebApi,
   artist: SimplifiedArtist,
