@@ -16,10 +16,11 @@ export const notifyNewReleases = (
   addressee: string,
   albums: SimplifiedAlbum[]
 ): Promise<MessageAPIResponseBase> => {
-  if (albums.length >= 1) {
+  const numAlbums = albums.length;
+  if (numAlbums >= 1) {
     const message = {
       type: "template" as const,
-      altText: "New releases on Spotify found.",
+      altText: `${numAlbums} release${numAlbums >= 2 ? "s" : ""} found.`,
       template: {
         type: "carousel" as const,
         columns: albums.map((album) => {
