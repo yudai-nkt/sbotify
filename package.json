@@ -26,6 +26,7 @@
     "@typescript-eslint/parser": "^4.15.1",
     "azurite": "^3.11.0",
     "concurrently": "^6.0.0",
+    "copy-webpack-plugin": "^8.0.0",
     "eslint": "^7.20.0",
     "eslint-config-prettier": "^7.2.0",
     "husky": "^5.0.9",

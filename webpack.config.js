@@ -1,4 +1,5 @@
 const path = require("path");
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   target: "node",
@@ -30,4 +31,12 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
     libraryTarget: "commonjs",
   },
+  plugins: [
+    new CopyPlugin({
+      patterns: [
+        { from: "host.json" },
+        { from: "*/function.json", to: "[file]" },
+      ],
+    }),
+  ],
 };
