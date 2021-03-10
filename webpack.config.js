@@ -1,5 +1,6 @@
 const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
+const JsonMinimizerPlugin = require("json-minimizer-webpack-plugin");
 
 module.exports = {
   target: "node",
@@ -39,4 +40,7 @@ module.exports = {
       ],
     }),
   ],
+  optimization: {
+    minimizer: ["...", new JsonMinimizerPlugin()],
+  },
 };
