@@ -31,6 +31,7 @@ module.exports = {
     filename: "[name]/bundle.js",
     path: path.resolve(__dirname, "dist"),
     libraryTarget: "commonjs",
+    clean: true,
   },
   plugins: [
     new CopyPlugin({
