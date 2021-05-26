@@ -22,3 +22,8 @@ export const EXCLUDES = [
   "BILLIE IDLE",
   "YVR",
 ];
+
+/**
+ * ID of the denonbu playlist.
+ */
+export const DENONBU_PLAYLIST_ID = "7i8SGeiff2FhLvl82hQMvg";

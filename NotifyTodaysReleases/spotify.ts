@@ -2,6 +2,7 @@ import { SpotifyWebApi } from "spotify-web-api-ts";
 import {
   SimplifiedAlbum,
   SimplifiedArtist,
+  SimplifiedTrack,
 } from "spotify-web-api-ts/types/types/SpotifyObjects";
 
 /**
@@ -76,4 +77,34 @@ export const getDiscographyReleasedOn = async (
     (album) => album.release_date === toJstString(releaseDate).substring(0, 10)
   );
   return newReleases;
+};
+
+/**
+ * Filter releases by a specific condition and add them to a playlist.
+ * @param client - Spotify API client in use.
+ * @param playlistId - ID of the playlist to manipulate.
+ * @param releases - Candidates of albums to add.
+ * @param condition - Filter to determine which releases to add.
+ * @returns Promise of snapshot ID of the updated playlist.
+ * Promise of undefined is returned if no tracks are added instead.
+ */
+export const updatePlaylist = async (
+  client: SpotifyWebApi,
+  playlistId: string,
+  releases: SimplifiedAlbum[],
+  condition: (album: SimplifiedAlbum) => boolean
+): Promise<string | undefined> => {
+  const albumIds = releases.filter(condition).map(({ id }) => id);
+  const tracks = (
+    await Promise.all(albumIds.map((id) => client.albums.getAlbumTracks(id)))
+  ).map(({ items }) => items);
+  const uris = ([] as SimplifiedTrack[])
+    .concat(...tracks)
+    // workaround for https://community.spotify.com/t5/Spotify-for-Developers/Artist-albums-endpoint-ignores-market-parameter/m-p/5193283
+    .filter(({ available_markets }) => available_markets.includes("JP"))
+    .map(({ uri }) => uri);
+
+  if (uris.length >= 1) {
+    return client.playlists.addItemsToPlaylist(playlistId, uris);
+  }
 };

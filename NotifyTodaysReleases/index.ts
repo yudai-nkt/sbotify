@@ -2,9 +2,13 @@ import { AzureFunction, Context } from "@azure/functions";
 import { Client } from "@line/bot-sdk";
 import { SpotifyWebApi } from "spotify-web-api-ts";
 import { SimplifiedAlbum } from "spotify-web-api-ts/types/types/SpotifyObjects";
-import { EXCLUDES } from "./constants";
+import { DENONBU_PLAYLIST_ID, EXCLUDES } from "./constants";
 import { notifyNewReleases } from "./line";
-import { getFollowedArtists, getDiscographyReleasedOn } from "./spotify";
+import {
+  getFollowedArtists,
+  getDiscographyReleasedOn,
+  updatePlaylist,
+} from "./spotify";
 
 // Based on the doc: https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer?tabs=csharp#usage
 type Timer = {
@@ -61,6 +65,13 @@ const timerTrigger: AzureFunction = async function (
   );
 
   await notifyNewReleases(line, process.env.LINE_ID ?? "", todaysReleasesDedup);
+
+  await updatePlaylist(
+    spotify,
+    DENONBU_PLAYLIST_ID,
+    todaysReleasesDedup,
+    ({ artists }) => artists.map(({ name }) => name).includes("電音部")
+  );
 
   if (todaysReleasesDedup.length >= 1) {
     context.log(JSON.stringify(todaysReleasesDedup, undefined, 2));
